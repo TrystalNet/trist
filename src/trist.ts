@@ -11,7 +11,7 @@ const prevId    = (node:Node) => <string>nodeProp(node, 'prev')
 const nextId    = (node:Node) => <string>nodeProp(node, 'next')
 const PVId      = (node:Node) => <string>nodeProp(node, 'PV')
 const NVId      = (node:Node) => <string>nodeProp(node, 'NV')
-const Payload   = (node:Node) => <Payload>nodeProp(node,'payload')
+const payload   = (node:Node) => <Payload>nodeProp(node,'payload')
 
 const _connect = (chain:Chain, prevProp:NodePropName, nextProp:NodePropName, ...ids:string[]):Chain => {
   ids.forEach((id, index) => {
