@@ -1,5 +1,6 @@
-import { Map, List, Iterable } from 'immutable';
-declare module Trist {
+declare module "trist" {
+    import { Map, List, Iterable } from 'immutable';
+    
     export type PayloadPropName = 'id' | 'trystup' | 'format';
     export type NodePropName = 'id' | 'rlevel' | 'prev' | 'next' | 'PV' | 'NV' | 'payload';
     export type fnStrToNumber = (s: string) => number;
@@ -69,7 +70,4 @@ declare module Trist {
     export function indent(chain: Chain, anchorId: string, focusId: string, offset: number): Map<string, Node>;
     export function chunk(chain: Chain, tgtSize: number, fnPayload: (counter: number) => JS.Payload): Map<string, Node>;
     export function collapse(chain: Chain, anchor: string, focus: string): Map<string, Node>;
-}
-declare module "trist" {
-    export = Trist
 }
