@@ -1,6 +1,5 @@
-import {Chain} from '../src/trist.interfaces'
 import {buildNodes,dumpTrist} from './helper'
-import {add,chainOps,collapse,chunk,indent} from '../src/trist'
+import {add,Chain, chainOps,collapse,chunk,indent} from '../src/trist'
 
 const X = {id:'X'}
 const A = 'A', B = 'B', C = 'C', D = 'D', E = 'E'

@@ -1,5 +1,4 @@
-import {Chain,JS} from '../src/trist.interfaces'
-import {chainOps} from '../src/trist'
+import {chainOps, Chain, JS} from '../src/trist'
 
 
 // const TOARRAY = (head:string, nodes, visibles=false) => {
