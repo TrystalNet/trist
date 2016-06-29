@@ -1,6 +1,5 @@
 import {chainOps, Chain, JS} from '../src/trist'
 
-
 // const TOARRAY = (head:string, nodes, visibles=false) => {
 //   let result = <string[]>[], id=head
 //   let prop = visibles ? 'NV' : 'next'

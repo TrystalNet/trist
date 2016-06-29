@@ -6,7 +6,11 @@ export type PayloadPropName = 'id' | 'trystup' | 'format';
 export type NodePropName = 'id' | 'rlevel' | 'prev' | 'next' | 'PV' | 'NV' | 'payload';
 export type fnStrToNumber = (s: string) => number;
 export type fnStrToStr = (s: string) => string;
+
 export namespace JS {
+    interface FUCKYOU {
+      asshole:number
+    }
     export interface Payload {
         id: string;
         trystup?: string;

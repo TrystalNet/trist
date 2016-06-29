@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "module": "commonjs",
     "removeComments": true,
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
     "strictNullChecks": false, // recursion doesn't seem to work with this turned o, so leave it off
-    "declaration": true,
+    "declaration": false,
     "outDir": ".."
   }  ,
   "files": [
@@ -14,7 +15,6 @@
     "./trist.ts"
   ],
   "exclude": [
-    "node_modules",
-    "../dist"
+    "node_modules"
   ]
 }
