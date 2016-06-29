@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "sourceMap": true,
+    "removeComments": false,
+    "noImplicitAny": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "outDir": "./bin"
+  }  ,
+  "files": [
+    "../node_modules/@types/lodash/index.d.ts",
+    "../node_modules/@types/jasmine/index.d.ts",
+    "../node_modules/immutable/dist/immutable.d.ts",
+    "../dist/trist.d.ts",
+    "./helper.ts",
+    "./test.spec.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "bin"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "removeComments": true,
+    "noImplicitAny": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "strictNullChecks": false, // recursion doesn't seem to work with this turned o, so leave it off
+    "declaration": true,
+    "outDir": ".."
+  }  ,
+  "files": [
+    "../node_modules/immutable/dist/immutable.d.ts",
+    "../node_modules/@types/lodash/index.d.ts",
+    "./trist.interfaces.ts",
+    "./trist.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "../dist"
+  ]
+}
