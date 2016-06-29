@@ -1,6 +1,6 @@
 {
   "name": "trist",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Trist methods for use in Trystal / Linelo projects",
   "homepage": "https://github.com/trystalnet/trist#readme",
   "author": "Terence O'Neill <terry.oneill@trystal.net>",
@@ -10,11 +10,11 @@
     "linelo",
     "trist"
   ],
-  "main": "./dist/trist.js",
+  "main": "./trist.js",
   "types": [
     "lodash"
   ],
-  "typings": "./dist/trist.d.ts",
+  "typings": "./trist.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/trystalnet/trist.git"
