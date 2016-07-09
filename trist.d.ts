@@ -1,4 +1,4 @@
-declare module "trist" {
+declare module "@trystal/trist" {
     import { Map, List, Iterable } from 'immutable';
     
     export type PayloadPropName = 'id' | 'trystup' | 'format';

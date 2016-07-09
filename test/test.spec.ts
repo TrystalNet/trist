@@ -1,9 +1,11 @@
-import {buildNodes,dumpTrist} from './helper'
+//import {dumpTrist} from './helper'
 import {add,Chain, chainOps,collapse,chunk,indent} from '../src/trist'
+import {Node, HelperNode, buildChain, dump} from '@trystal/data-gen'
 
 const X = {id:'X'}
 const A = 'A', B = 'B', C = 'C', D = 'D', E = 'E'
-const chainFactory = (spec:string):Chain => Immutable.fromJS(buildNodes(spec))
+const chainFactory = (spec:string):Chain => Immutable.fromJS(buildChain(spec))
+const dumpTrist = (chain:Chain):string => dump(chain.toJS())
 
 const testCase = (spec:string):[string,string,Chain] => {
   const [AF,chainSpec] = spec.split(':')

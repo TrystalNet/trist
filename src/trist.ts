@@ -8,9 +8,6 @@ export type fnStrToNumber = (s: string) => number;
 export type fnStrToStr = (s: string) => string;
 
 export namespace JS {
-    interface FUCKYOU {
-      asshole:number
-    }
     export interface Payload {
         id: string;
         trystup?: string;

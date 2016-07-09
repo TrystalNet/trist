@@ -8,10 +8,9 @@
     "outDir": "./bin"
   }  ,
   "files": [
-    "../node_modules/@types/lodash/index.d.ts",
     "../node_modules/@types/jasmine/index.d.ts",
+    "../node_modules/@types/lodash/index.d.ts",
     "../node_modules/immutable/dist/immutable.d.ts",
-    "./helper.ts",
     "./test.spec.ts"
   ],
   "exclude": [
