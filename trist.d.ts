@@ -1,34 +1,10 @@
 declare module "@trystal/trist" {
     import { Map, List, Iterable } from 'immutable';
+    import { Payload, ChainIM } from '@trystal/interfaces'
     
-    export type PayloadPropName = 'id' | 'trystup' | 'format';
-    export type NodePropName = 'id' | 'rlevel' | 'prev' | 'next' | 'PV' | 'NV' | 'payload';
     export type fnStrToNumber = (s: string) => number;
     export type fnStrToStr = (s: string) => string;
-    export namespace JS {
-        interface Payload {
-            id: string;
-            trystup?: string;
-        }
-        interface Node {
-            id: string;
-            prev?: string;
-            next?: string;
-            PV?: string;
-            NV?: string;
-            rlevel?: number;
-            payload?: Payload;
-        }
-    }
-    export interface Payload extends Map<PayloadPropName, string> {
-        toJS(): JS.Payload;
-    }
-    export interface Node extends Map<NodePropName, Payload | string | number> {
-        toJS(): JS.Node;
-    }
-    export type Chain = Map<string, Node>;
-    export type IDList = List<string>;
-    export function chainOps(chain: Chain): {
+    export function chainOps(chain: ChainIM): {
         node: (id: string) => Node;
         head: () => string;
         pid: (id: string) => string;
@@ -64,10 +40,10 @@ declare module "@trystal/trist" {
         vchain: (id: string) => string[];
         vchainLength: (id: string) => number;
     };
-    export function chainify(payloads: JS.Payload[], fnLevel?: fnStrToNumber): Chain;
-    export function collapseAll(chain: Chain, fnLevel: fnStrToNumber): Map<string, Node>;
-    export function add(chain: Chain, focusId: string, payload: JS.Payload): Map<string, Node>;
-    export function indent(chain: Chain, anchorId: string, focusId: string, offset: number): Map<string, Node>;
-    export function chunk(chain: Chain, tgtSize: number, fnPayload: (counter: number) => JS.Payload): Map<string, Node>;
-    export function collapse(chain: Chain, anchor: string, focus: string): Map<string, Node>;
+    export function chainify(payloads: Payload[], fnLevel?: fnStrToNumber): ChainIM;
+    export function collapseAll(chain: ChainIM, fnLevel: fnStrToNumber): Map<string, Node>;
+    export function add(chain: ChainIM, focusId: string, payload: Payload): Map<string, Node>;
+    export function indent(chain: ChainIM, anchorId: string, focusId: string, offset: number): Map<string, Node>;
+    export function chunk(chain: ChainIM, tgtSize: number, fnPayload: (counter: number) => Payload): Map<string, Node>;
+    export function collapse(chain: ChainIM, anchor: string, focus: string): Map<string, Node>;
 }

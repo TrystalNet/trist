@@ -1,46 +1,24 @@
 console.log('16-06-28B')
 
 import { Map, List } from 'immutable';
+import {
+  Payload, Node, 
+  PayloadPropName,NodePropName,
+  NodeIM,PayloadIM,ChainIM, IDListIM
+} from '@trystal/interfaces'
 
-export type PayloadPropName = 'id' | 'trystup' | 'format';
-export type NodePropName = 'id' | 'rlevel' | 'prev' | 'next' | 'PV' | 'NV' | 'payload';
 export type fnStrToNumber = (s: string) => number;
 export type fnStrToStr = (s: string) => string;
 
-export namespace JS {
-    export interface Payload {
-        id: string;
-        trystup?: string;
-    }
-    export interface Node {
-        id: string;
-        prev?: string;
-        next?: string;
-        PV?: string;
-        NV?: string;
-        rlevel?: number;
-        payload?: Payload;
-    }
-}
-export interface Payload extends Map<PayloadPropName, string> {
-    toJS(): JS.Payload;
-}
-export interface Node extends Map<NodePropName, Payload | string | number> {
-    toJS(): JS.Node;
-}
-export type Chain = Map<string, Node>;
-export type IDList = List<string>;
+const nodeProp  = (node:NodeIM, propname:NodePropName) => node ? node.get(propname) : null  
+const rlevel    = (node:NodeIM) => <number>nodeProp(node, 'rlevel')
+const prevId    = (node:NodeIM) => <string>nodeProp(node, 'prev')
+const nextId    = (node:NodeIM) => <string>nodeProp(node, 'next')
+const PVId      = (node:NodeIM) => <string>nodeProp(node, 'PV')
+const NVId      = (node:NodeIM) => <string>nodeProp(node, 'NV')
+const payload   = (node:NodeIM) => <PayloadIM>nodeProp(node,'payload')
 
-
-const nodeProp  = (node:Node, propname:NodePropName) => node ? node.get(propname) : null  
-const rlevel    = (node:Node) => <number>nodeProp(node, 'rlevel')
-const prevId    = (node:Node) => <string>nodeProp(node, 'prev')
-const nextId    = (node:Node) => <string>nodeProp(node, 'next')
-const PVId      = (node:Node) => <string>nodeProp(node, 'PV')
-const NVId      = (node:Node) => <string>nodeProp(node, 'NV')
-const payload   = (node:Node) => <Payload>nodeProp(node,'payload')
-
-const _connect = (chain:Chain, prevProp:NodePropName, nextProp:NodePropName, ...ids:string[]):Chain => {
+const _connect = (chain:ChainIM, prevProp:NodePropName, nextProp:NodePropName, ...ids:string[]):ChainIM => {
   ids.forEach((id, index) => {
     if(id) {
       if(index > 0) chain = chain.setIn([id,prevProp],ids[index-1])
@@ -49,17 +27,17 @@ const _connect = (chain:Chain, prevProp:NodePropName, nextProp:NodePropName, ...
   })
   return chain
 }
-const connect = (chain:Chain, ...ids:string[]) => _connect(chain, 'prev','next', ...ids)
-const connectV = (chain:Chain, ...ids:string[]) => _connect(chain, 'PV', 'NV', ...ids)
+const connect = (chain:ChainIM, ...ids:string[]) => _connect(chain, 'prev','next', ...ids)
+const connectV = (chain:ChainIM, ...ids:string[]) => _connect(chain, 'PV', 'NV', ...ids)
 
-export function chainOps(chain:Chain) {
-  const node   = (id:string):Node => chain.get(id)
+export function chainOps(chain:ChainIM) {
+  const node   = (id:string):NodeIM => chain.get(id)
   const pid    = (id:string):string => chain.getIn([id,'prev'])
   const pvid   = (id:string):string => chain.getIn([id,'PV'])
   const nid    = (id:string):string => chain.getIn([id,'next'])
   const nvid   = (id:string):string => chain.getIn([id,'NV'])
   const rlevel = (id:string):number => chain.getIn([id,'rlevel']) || 0
-  const payload = (id:string):Payload => chain.getIn([id,'payload'])
+  const payload = (id:string):PayloadIM => chain.getIn([id,'payload'])
 
   const head = ():string => chain.first() ? hid(<string>chain.first().get('id')) : null
   const last = ():string => chain.last() ? tid(<string>chain.last().get('id')) : null 
@@ -73,7 +51,7 @@ export function chainOps(chain:Chain) {
   const lastChildOrSelfId = (id:string):string => id ? (nvid(id) ? pid(nvid(id)) : tid(id)) : null
 
   // these are just for testing
-  const ids = (id:string):IDList => !id ? Immutable.List<string>() : ids(nid(id)).unshift(id)
+  const ids = (id:string):IDListIM => !id ? Immutable.List<string>() : ids(nid(id)).unshift(id)
   const rlevels = (id:string) => ids(id).map(id => rlevel(id))
   const pvids = (id:string) => ids(id).map(id=>pvid(id)) 
   const nvids = (id:string) => ids(id).map(id=>nvid(id))
@@ -133,7 +111,7 @@ export function chainOps(chain:Chain) {
   }
 }
 
-export function chainify(payloads:JS.Payload[],fnLevel:fnStrToNumber=id=>0) : Chain {
+export function chainify(payloads:Payload[],fnLevel:fnStrToNumber=id=>0) : ChainIM {
   return Immutable.fromJS(payloads.reduce((accum, payload, index) => {
     const {id} = payload
     const prev = index ? payloads[index-1].id : null
@@ -144,7 +122,7 @@ export function chainify(payloads:JS.Payload[],fnLevel:fnStrToNumber=id=>0) : Ch
   },{}))
 }
 
-export function collapseAll(chain:Chain, fnLevel:fnStrToNumber) {
+export function collapseAll(chain:ChainIM, fnLevel:fnStrToNumber) {
   // levels:  [id,id,...], [level,level,...]
   // output:  [{id,PV,rlevel,...},{id,PV,rlevel,...},...]
   const stack = <string[]>[]
@@ -170,7 +148,7 @@ export function collapseAll(chain:Chain, fnLevel:fnStrToNumber) {
   }
   return chain
 }
-export function add(chain:Chain, focusId:string, payload:JS.Payload) {
+export function add(chain:ChainIM, focusId:string, payload:Payload) {
   const {id} = payload
   const ipayload = Immutable.fromJS({id,payload})
   if(chain.isEmpty()) {
@@ -191,7 +169,7 @@ export function add(chain:Chain, focusId:string, payload:JS.Payload) {
   }
   return chain
 }
-export function indent(chain:Chain, anchorId:string, focusId:string, offset:number) {
+export function indent(chain:ChainIM, anchorId:string, focusId:string, offset:number) {
   const COPS = chainOps(chain)
   const [first,last] = COPS.sort(anchorId, focusId)
   chain = chain.setIn([first, 'rlevel'], COPS.rlevel(first) + offset)
@@ -201,7 +179,7 @@ export function indent(chain:Chain, anchorId:string, focusId:string, offset:numb
 }
 const groupSize = (maxSize:number, itemCount:number) => Math.round(itemCount / Math.ceil(itemCount / maxSize)) 
 
-export function chunk(chain:Chain, tgtSize:number, fnPayload:(counter:number)=>JS.Payload) {
+export function chunk(chain:ChainIM, tgtSize:number, fnPayload:(counter:number)=>Payload) {
   let counter = 0;
   let COPS = chainOps(chain)
   let vchain = _.find(COPS.vchains(), vchain => vchain.length > tgtSize * 1.4)
@@ -222,7 +200,7 @@ export function chunk(chain:Chain, tgtSize:number, fnPayload:(counter:number)=>J
   return chain
 }
 
-export function collapse(chain:Chain, anchor:string, focus:string) {
+export function collapse(chain:ChainIM, anchor:string, focus:string) {
   // only closes one level at a time
   const COPS = chainOps(chain)
   const sorted = COPS.sort(anchor,focus)
