@@ -41,9 +41,9 @@ declare module "@trystal/trist" {
         vchainLength: (id: string) => number;
     };
     export function chainify(payloads: Payload[], fnLevel?: fnStrToNumber): ChainIM;
-    export function collapseAll(chain: ChainIM, fnLevel: fnStrToNumber): Map<string, Node>;
-    export function add(chain: ChainIM, focusId: string, payload: Payload): Map<string, Node>;
-    export function indent(chain: ChainIM, anchorId: string, focusId: string, offset: number): Map<string, Node>;
-    export function chunk(chain: ChainIM, tgtSize: number, fnPayload: (counter: number) => Payload): Map<string, Node>;
-    export function collapse(chain: ChainIM, anchor: string, focus: string): Map<string, Node>;
+    export function collapseAll(chain: ChainIM, fnLevel: fnStrToNumber): ChainIM;
+    export function add(chain: ChainIM, focusId: string, payload: Payload): ChainIM;
+    export function indent(chain: ChainIM, anchorId: string, focusId: string, offset: number): ChainIM
+    export function chunk(chain: ChainIM, tgtSize: number, fnPayload: (counter: number) => Payload): ChainIM
+    export function collapse(chain: ChainIM, anchor: string, focus: string): ChainIM
 }
