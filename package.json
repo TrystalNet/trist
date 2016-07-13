@@ -1,6 +1,6 @@
 {
   "name": "@trystal/trist",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Trist methods for use in Trystal / Linelo projects",
   "homepage": "https://github.com/trystalnet/trist#readme",
   "author": "Terence O'Neill <terry.oneill@trystal.net>",
@@ -24,7 +24,7 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "@trystal/data-gen": "^1.1.0",
+    "@trystal/data-gen": "^1.5.1",
     "@types/jasmine": "^2.2.22-alpha",
     "@types/lodash": "^4.0.21-alpha",
     "jasmine": "^2.4.1",
@@ -42,9 +42,9 @@
     "test": "test"
   },
   "dependencies": {
-    "@trystal/interfaces": "^1.0.0",
+    "@trystal/interfaces": "^2.2.2",
+    "@trystal/uniq-ish": "^1.1.0",
     "immutable": "^3.8.1",
-    "lodash": "^4.13.1",
-    "uniq-ish": "0.0.1"
+    "lodash": "^4.13.1"
   }
 }

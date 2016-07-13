@@ -1,11 +1,16 @@
 console.log('16-06-28B')
 
 import { Map, List } from 'immutable';
-import {
-  Payload, Node, 
-  PayloadPropName,NodePropName,
-  NodeIM,PayloadIM,ChainIM, IDListIM
-} from '@trystal/interfaces'
+
+import {JS,IMM} from '@trystal/interfaces'
+import Payload = JS.Payload
+import Node = JS.Node
+
+import NodeIM = IMM.Node
+import PayloadIM = IMM.Payload
+import ChainIM = IMM.Chain
+import IDListIM = IMM.IDList
+import NodePropName = IMM.NodePropName
 
 export type fnStrToNumber = (s: string) => number;
 export type fnStrToStr = (s: string) => string;

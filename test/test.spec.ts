@@ -1,8 +1,10 @@
 //import {dumpTrist} from './helper'
-import {ChainIM} from '@trystal/interfaces'
-import {Node, HelperNode, buildChain, dump} from '@trystal/data-gen'
-
+import {JS,IMM} from '@trystal/interfaces'
+import {HelperNode, buildChain, dump} from '@trystal/data-gen'
 import {add, chainOps,collapse,chunk,indent} from '../src/trist'
+
+import ChainIM = IMM.Chain
+import Node = JS.Node 
 
 const X = {id:'X'}
 const A = 'A', B = 'B', C = 'C', D = 'D', E = 'E'
