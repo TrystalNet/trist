@@ -1,7 +1,10 @@
 declare module "@trystal/trist" {
     import { Map, List, Iterable } from 'immutable';
-    import { Payload, ChainIM } from '@trystal/interfaces'
+    import { JS, IMM } from '@trystal/interfaces'
     
+    import Payload = JS.Payload
+    import ChainIM =IMM.Chain
+
     export type fnStrToNumber = (s: string) => number;
     export type fnStrToStr = (s: string) => string;
     export function chainOps(chain: ChainIM): {
