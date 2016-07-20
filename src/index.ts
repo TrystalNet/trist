@@ -1,16 +1,14 @@
-console.log('16-06-28B')
+console.log('16-76-20A')
+import * as _ from 'lodash' 
+import { Map, List, fromJS } from 'immutable';
 
-import { Map, List } from 'immutable';
+import {Payload, Node, IMM} from '@trystal/interfaces'
 
-import {JS,IMM} from '@trystal/interfaces'
-import Payload = JS.Payload
-import Node = JS.Node
-
-import NodeIM = IMM.Node
-import PayloadIM = IMM.Payload
-import ChainIM = IMM.Chain
+import NodeIM = IMM.Node.IState
+import PayloadIM = IMM.Payload.IState
+import ChainIM = IMM.Chain.IState
+import NodePropName = IMM.Node.PropName
 import IDListIM = IMM.IDList
-import NodePropName = IMM.NodePropName
 
 export type fnStrToNumber = (s: string) => number;
 export type fnStrToStr = (s: string) => string;
@@ -23,7 +21,7 @@ const PVId      = (node:NodeIM) => <string>nodeProp(node, 'PV')
 const NVId      = (node:NodeIM) => <string>nodeProp(node, 'NV')
 const payload   = (node:NodeIM) => <PayloadIM>nodeProp(node,'payload')
 
-const _connect = (chain:ChainIM, prevProp:NodePropName, nextProp:NodePropName, ...ids:string[]):ChainIM => {
+const _connect = (chain:ChainIM, prevProp:NodePropName, nextProp:NodePropName, ...ids:(string|null)[]):ChainIM => {
   ids.forEach((id, index) => {
     if(id) {
       if(index > 0) chain = chain.setIn([id,prevProp],ids[index-1])
@@ -32,8 +30,8 @@ const _connect = (chain:ChainIM, prevProp:NodePropName, nextProp:NodePropName, .
   })
   return chain
 }
-const connect = (chain:ChainIM, ...ids:string[]) => _connect(chain, 'prev','next', ...ids)
-const connectV = (chain:ChainIM, ...ids:string[]) => _connect(chain, 'PV', 'NV', ...ids)
+const connect = (chain:ChainIM, ...ids:(string|null)[]) => _connect(chain, 'prev','next', ...ids)
+const connectV = (chain:ChainIM, ...ids:(string|null)[]) => _connect(chain, 'PV', 'NV', ...ids)
 
 export function chainOps(chain:ChainIM) {
   const node   = (id:string):NodeIM => chain.get(id)
@@ -44,24 +42,34 @@ export function chainOps(chain:ChainIM) {
   const rlevel = (id:string):number => chain.getIn([id,'rlevel']) || 0
   const payload = (id:string):PayloadIM => chain.getIn([id,'payload'])
 
-  const head = ():string => chain.first() ? hid(<string>chain.first().get('id')) : null
-  const last = ():string => chain.last() ? tid(<string>chain.last().get('id')) : null 
+  // recursive, so have to be function, can't be const
+  function hid(id:string):string { return !pid(id) ? id : hid(pvid(id) || pid(id)) } 
+  function tid(id:string):string { return !nid(id)  ? id : tid(nvid(id) || nid(id))  } 
+  function hvid(id:string):string { return !pvid(id) ? id : hvid(pvid(id)) }
+  function tvid(id:string):string { return !nvid(id) ? id : tvid(nvid(id)) }
+  function level(id:string):number{ return !id ? 0 : rlevel(id) + level(pvid(id) || pid(id)) }
 
-  const hid  = (id:string):string => !pid(id)  ? id : hid(pvid(id) || pid(id)) 
-  const hvid = (id:string):string => !pvid(id) ? id : hvid(pvid(id))
-  const tid  = (id:string):string => !nid(id)  ? id : tid(nvid(id) || nid(id)) 
-  const tvid = (id:string):string => !nvid(id) ? id : tvid(nvid(id))
+  const head = ():string|null => {
+    var CF = chain.first()
+    if(CF) return hid(<string>chain.first().get('id'))
+    return null 
+  }
 
-  const level = (id:string):number => !id ? 0 : rlevel(id) + level(pvid(id) || pid(id))
-  const lastChildOrSelfId = (id:string):string => id ? (nvid(id) ? pid(nvid(id)) : tid(id)) : null
+
+  const last = ():string|null => chain.last() ? tid(<string>chain.last().get('id')) : null 
+
+  function lastChildOrSelfId(id:string):string|null {
+    if(!id) return null 
+    return nvid(id) ? pid(nvid(id)) : tid(id) 
+  }
 
   // these are just for testing
-  const ids = (id:string):IDListIM => !id ? Immutable.List<string>() : ids(nid(id)).unshift(id)
-  const rlevels = (id:string) => ids(id).map(id => rlevel(id))
-  const pvids = (id:string) => ids(id).map(id=>pvid(id)) 
-  const nvids = (id:string) => ids(id).map(id=>nvid(id))
+  function ids(id:string):IDListIM { return !id ? List<string>() : ids(nid(id)).unshift(id) }
+  const rlevels = (id:string) => ids(id).map(id => rlevel(id!))
+  const pvids = (id:string) => ids(id).map(id=>pvid(id!)) 
+  const nvids = (id:string) => ids(id).map(id=>nvid(id!))
 
-  const vids = (A:string,B:string):string[] => A === B ? [A] : [A,...vids(nvid(A),B)]
+  function vids(A:string,B:string):string[] { return A === B ? [A] : [A,...vids(nvid(A),B)] }
   const isOpen = (id:string):boolean => rlevel(nvid(id)) > 0
   const isClosed = (id:string):boolean => nid(id) && !pvid(nid(id))
   const isBoth = (id:string):boolean => isOpen(id) && isClosed(id)
@@ -69,7 +77,7 @@ export function chainOps(chain:ChainIM) {
   const contextLevel = (id:string):number => level(pvid(id) || pid(id))
   const vlevels = (A:string,B:string) => vids(A,B).map(id => ({id, vlevel: contextLevel(A) + rlevel(id)}))
 
-  const lastVisibleChildId = (id:string):string => {
+  const lastVisibleChildId = (id:string):string|null => {
     let lvc = nvid(id)
     let lvl = rlevel(lvc)
     if(!lvc || lvl <= 0) return null
@@ -98,10 +106,10 @@ export function chainOps(chain:ChainIM) {
     return -1
   }
   const sort = (...ids:string[]):string[] => ids.sort(compare)
-  const heads = ():string[] => chain.keySeq().filter(id => !pvid(id)).toArray() 
-  const vchainLength = (id:string):number => !id ? 0 : 1 + vchainLength(nvid(id))
+  const heads = ():string[] => chain.keySeq().filter(id => !pvid(id!)).toArray() 
+  function vchainLength(id:string):number { return !id ? 0 : 1 + vchainLength(nvid(id)) }
   const vchains = () => heads().map(id => ({id, length:vchainLength(id)}))
-  const vchain = (id:string):string[] => !nvid(id) ? [id] : [id,...vchain(nvid(id))] 
+  function vchain(id:string):string[] { return !nvid(id) ? [id] : [id,...vchain(nvid(id))] } 
 
   return {
     node, head,
@@ -117,7 +125,7 @@ export function chainOps(chain:ChainIM) {
 }
 
 export function chainify(payloads:Payload[],fnLevel:fnStrToNumber=id=>0) : ChainIM {
-  return Immutable.fromJS(payloads.reduce((accum, payload, index) => {
+  return fromJS(payloads.reduce((accum, payload, index) => {
     const {id} = payload
     const prev = index ? payloads[index-1].id : null
     const next = index < payloads.length - 1 ? payloads[index+1].id : null
@@ -132,7 +140,7 @@ export function collapseAll(chain:ChainIM, fnLevel:fnStrToNumber) {
   // output:  [{id,PV,rlevel,...},{id,PV,rlevel,...},...]
   const stack = <string[]>[]
   const getPVId = (level:number) => {
-    let pvId = <string>null
+    let pvId = <string|null|undefined>null
     while(!_.isEmpty(stack) && fnLevel(_.last(stack)) >= level) pvId = stack.pop()
     return pvId
   }
@@ -144,8 +152,8 @@ export function collapseAll(chain:ChainIM, fnLevel:fnStrToNumber) {
     const lid = pvId || C.pid(id)
     let node=chain.get(id)
     .set('rlevel', level - (lid ? fnLevel(lid) : 0))
-    .set('PV',pvId)
-    .set('NV',null)
+    .set('PV',pvId!)
+    .set('NV', null)
     if(pvId) chain = chain.setIn([pvId,'NV'],id)
     chain = chain.set(id,node)  
     stack.push(id)
@@ -155,7 +163,7 @@ export function collapseAll(chain:ChainIM, fnLevel:fnStrToNumber) {
 }
 export function add(chain:ChainIM, focusId:string, payload:Payload) {
   const {id} = payload
-  const ipayload = Immutable.fromJS({id,payload})
+  const ipayload = fromJS({id,payload})
   if(chain.isEmpty()) {
     chain = chain.set(id, ipayload) 
     chain = chain.setIn([id,'rlevel'],0)
@@ -216,7 +224,7 @@ export function collapse(chain:ChainIM, anchor:string, focus:string) {
   _.each(work, ({id:A,level}) => {
     const B = COPS.nvid(A)             // must exist, or collapse is not possible
     const C = COPS.lastVisibleChildId(A) // must exist, for the same reason
-    const D = COPS.nvid(C)
+    const D = C ? COPS.nvid(C) : null
     chain = connectV(chain, A, D)
     chain = chain.setIn([B, 'PV'], null).setIn([C, 'NV'], null)
     if (D) chain = chain.setIn([D, 'rlevel'], COPS.level(D) - level)

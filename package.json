@@ -10,11 +10,11 @@
     "linelo",
     "trist"
   ],
-  "main": "trist.js",
+  "main": "index.js",
   "types": [
     "lodash"
   ],
-  "typings": "trist.d.ts",
+  "typings": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/trystalnet/trist.git"
@@ -24,14 +24,13 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "@trystal/data-gen": "^1.5.1",
-    "@types/jasmine": "^2.2.22-alpha",
-    "@types/lodash": "^4.0.21-alpha",
+    "@trystal/data-gen": "^1.6.2",
+    "@types/jasmine": "^2.2.30",
     "jasmine": "^2.4.1",
     "jasmine-core": "2.4.1",
     "source-map-loader": "^0.1.5",
     "ts-loader": "^0.8.2",
-    "typescript": "^2.0.0-dev.20160707"
+    "typescript": "^2.0.0"
   },
   "scripts": {
     "prod": "tsc -p tsconfig.json",
@@ -42,8 +41,9 @@
     "test": "test"
   },
   "dependencies": {
-    "@trystal/interfaces": "^2.2.2",
+    "@trystal/interfaces": "^3.0.5",
     "@trystal/uniq-ish": "^1.1.0",
+    "@types/lodash": "0.0.28",
     "immutable": "^3.8.1",
     "lodash": "^4.13.1"
   }
