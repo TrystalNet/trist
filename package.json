@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "tryst",
   "version": "1.0.0",
   "main": "trist.js",
@@ -14,54 +13,5 @@
   },
   "scripts": {
     "test": "jest"
-=======
-  "name": "@trystal/trist",
-  "version": "1.1.4",
-  "description": "Trist methods for use in Trystal / Linelo projects",
-  "homepage": "https://github.com/trystalnet/trist#readme",
-  "author": "Terence O'Neill <terry.oneill@trystal.net>",
-  "contributors": [],
-  "keywords": [
-    "trystal",
-    "linelo",
-    "trist"
-  ],
-  "main": "index.js",
-  "types": [
-    "lodash"
-  ],
-  "typings": "index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/trystalnet/trist.git"
-  },
-  "bugs": {
-    "url": "https://github.com/trystalnet/trist/issues"
-  },
-  "license": "ISC",
-  "devDependencies": {
-    "@trystal/data-gen": "^1.6.2",
-    "@types/jasmine": "^2.2.30",
-    "jasmine": "^2.4.1",
-    "jasmine-core": "2.4.1",
-    "source-map-loader": "^0.1.5",
-    "ts-loader": "^0.8.2",
-    "typescript": "^2.0.0"
-  },
-  "scripts": {
-    "prod": "tsc -p tsconfig.json",
-    "devl": "tsc -p tconfig.json",
-    "test": "tsc -p ./test/tsconfig.json"
-  },
-  "directories": {
-    "test": "test"
-  },
-  "dependencies": {
-    "@trystal/interfaces": "^3.0.5",
-    "@trystal/uniq-ish": "^1.1.0",
-    "@types/lodash": "0.0.28",
-    "immutable": "^3.8.1",
-    "lodash": "^4.13.1"
->>>>>>> oldtrist/master
   }
 }

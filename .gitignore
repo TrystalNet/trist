@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-node_modules
-=======
 .node-version
 .vscode
 *.map
 *.log
 node_modules
 test/bin
->>>>>>> oldtrist/master
