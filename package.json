@@ -1,0 +1,17 @@
+{
+  "name": "tryst",
+  "version": "1.0.0",
+  "main": "trist.js",
+  "license": "MIT",
+  "dependencies": {
+    "@trystal/undo": "^1.0.0",
+    "@trystal/uniq-ish": "^2.0.1",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}
