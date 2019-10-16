@@ -1,6 +1,6 @@
 {
-  "name": "tryst",
-  "version": "1.0.0",
+  "name": "@trystal/tryst",
+  "version": "2.0.1",
   "main": "trist.js",
   "license": "MIT",
   "dependencies": {
@@ -13,5 +13,10 @@
   },
   "scripts": {
     "test": "jest"
-  }
+  },
+  "description": "Low level construct for manipulating trees of arbitrary payloads.",
+  "directories": {
+    "test": "tests"
+  },
+  "author": ""
 }
